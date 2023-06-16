@@ -7,7 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", "https://user-lake.vercel.app"],
     credentials: true,
   })
 );
@@ -40,13 +40,11 @@ app.post("/api-user/add", async (req, res) => {
     const savedUser = await newUser.save();
     const userId = savedUser.id;
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "User added successfully",
-        userId: userId,
-      });
+    res.status(200).json({
+      success: true,
+      message: "User added successfully",
+      userId: userId,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to add user" });
   }
@@ -60,6 +58,9 @@ app.get("/api-user/:userid", async (req, res) => {
     console.log(error);
     res.status(500).json({ success: false, message: "Failed to fetch users" });
   }
+});
+app.get("/", (req, res) => {
+  res.send("running");
 });
 app.listen(process.env.PORT || 4000, () => {
   console.log("server started");
